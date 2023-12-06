@@ -16,14 +16,15 @@ export async function createUser(user: User) {
 				error: "El correo electrónico ya está en uso. No se puede crear el usuario.",
 			};
 		}
-		const newCategory = await prisma.users.create({
+		const newUser = await prisma.users.create({
 			data: {
 				Nombre: user.nombre,
 				Apellido: user.apellido,
 				Email: user.email,
+				Password: user.password,
 			},
 		});
-		return newCategory;
+		return newUser;
 	} catch (err: any) {
 		console.error("Error al crear el usuario:", err);
 		throw err;

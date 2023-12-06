@@ -10,6 +10,7 @@ export async function createExpenses(expense: Expense) {
 			const gastoData = {
 				User_ID: expense.user_id,
 				Categoria_ID: expense.categoria_id,
+				Detalle: expense.detalle,
 			};
 
 			const createExpense = await tx.gastos.create({
