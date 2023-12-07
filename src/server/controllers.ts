@@ -11,6 +11,42 @@ import { deleteExpense } from "../bussiness-logic/_delete/deleteExpense";
 import { createCategory } from "../bussiness-logic/_create/createCategory";
 import { createUser } from "../bussiness-logic/_create/createUser";
 import { showUsers } from "../bussiness-logic/_show/showUsers";
+import { loginUser } from "../bussiness-logic/login/loginUser";
+
+export const loginController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const { email, password } = req.body;
+		const result = await loginUser(email, password);
+
+		if (result.success) {
+			return res
+				.status(200)
+				.json({ success: result.success, user: result.user, token: result.token });
+		} else {
+			return res.status(401).json({ error: result.error });
+		}
+	} catch (error: any) {
+		return res.status(500).json({ error: error.message });
+	}
+};
+
+export const createUserController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const userInput = req.body;
+		const result = await createUser(userInput);
+		res.json(result);
+	} catch (error: any) {
+		res.status(500).json({ message: error.message });
+	}
+};
 
 export const createExpenseController = async (
 	req: Request,
@@ -34,20 +70,6 @@ export const createCategoryController = async (
 	try {
 		const categoryInput = req.body;
 		const result = await createCategory(categoryInput);
-		res.json(result);
-	} catch (error: any) {
-		res.status(500).json({ message: error.message });
-	}
-};
-
-export const createUserController = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		const userInput = req.body;
-		const result = await createUser(userInput);
 		res.json(result);
 	} catch (error: any) {
 		res.status(500).json({ message: error.message });

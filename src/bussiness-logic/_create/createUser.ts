@@ -1,5 +1,6 @@
 import { prisma } from "../../repository/prisma";
 import { User } from "../types/user";
+import bcrypt from "bcrypt";
 
 export async function createUser(user: User) {
 	try {
@@ -16,12 +17,16 @@ export async function createUser(user: User) {
 				error: "El correo electrónico ya está en uso. No se puede crear el usuario.",
 			};
 		}
+
+		//Genero un hash para almacenar la contraseña
+		const hashedPassword = await bcrypt.hash(user.password, 10);
+
 		const newUser = await prisma.users.create({
 			data: {
 				Nombre: user.nombre,
 				Apellido: user.apellido,
 				Email: user.email,
-				Password: user.password,
+				Password: hashedPassword,
 			},
 		});
 		return newUser;

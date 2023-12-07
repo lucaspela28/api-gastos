@@ -3,10 +3,13 @@ import * as controllers from "./controllers";
 
 export const expensesRouter = Router();
 
+//LOGIN
+expensesRouter.post("/login", controllers.loginController);
+
 //POSTS
 expensesRouter.post("/createExpenses", controllers.createExpenseController);
 expensesRouter.post("/createCategory", controllers.createCategoryController);
-expensesRouter.post("/createUser", controllers.createUserController);
+expensesRouter.post("/register", controllers.createUserController);
 
 //GETS
 expensesRouter.get("/showExpenses", controllers.showExpensesController);
