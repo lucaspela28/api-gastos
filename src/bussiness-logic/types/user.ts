@@ -6,4 +6,5 @@ export type User = {
 	updated_at: Date;
 	deleted_at?: Date;
 	password: string;
+	rol_id: number;
 };

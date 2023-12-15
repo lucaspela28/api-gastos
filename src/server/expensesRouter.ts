@@ -1,15 +1,7 @@
 import { Router } from "express";
-import * as controllers from "./controllers";
-
+import * as controllers from "./expensesControllers";
+import { authMiddleware, authAdminMiddleware } from "./middlewares/authMiddleware";
 export const expensesRouter = Router();
-
-//LOGIN
-expensesRouter.post("/login", controllers.loginController);
-
-//POSTS
-expensesRouter.post("/createExpenses", controllers.createExpenseController);
-expensesRouter.post("/createCategory", controllers.createCategoryController);
-expensesRouter.post("/register", controllers.createUserController);
 
 //GETS
 expensesRouter.get("/showExpenses", controllers.showExpensesController);
@@ -19,6 +11,13 @@ expensesRouter.get("/categoriaTotal/:id", controllers.showTotalByCategoryControl
 expensesRouter.get("/expenseByID/:id", controllers.searchExpenseByIDController);
 expensesRouter.get("/expenseByUser/:id", controllers.searchExpenseByUserController);
 expensesRouter.get("/categoria/:id", controllers.searchExpenseByCategoryController);
+
+expensesRouter.use(authMiddleware);
+expensesRouter.use(authAdminMiddleware);
+
+//POSTS
+expensesRouter.post("/createExpenses", controllers.createExpenseController);
+expensesRouter.post("/createCategory", controllers.createCategoryController);
 
 //PUTS
 expensesRouter.put("/updateExpense/:id", controllers.updateExpenseController);

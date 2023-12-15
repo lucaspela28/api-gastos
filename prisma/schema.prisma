@@ -3,22 +3,25 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl= env("SHADOW_DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model users {
-  id         Int       @id @default(autoincrement())
-  Nombre     String    @db.VarChar(255)
-  Apellido   String    @db.VarChar(255)
-  Email      String    @db.VarChar(255) @unique
-  Password   String
-  Gasto      gastos[]
-  Gasto_Detalle      gastos_detalle[] 
-  created_at DateTime  @default(now()) @db.Timestamp(0)
-  updated_at DateTime  @default(now()) @db.Timestamp(0)
-  deleted_at DateTime? @db.Timestamp(0)
+  id            Int              @id @default(autoincrement())
+  Nombre        String           @db.VarChar(255)
+  Apellido      String           @db.VarChar(255)
+  Email         String           @unique @db.VarChar(255)
+  Rol_ID        Int
+  Password      String
+  Gasto         gastos[]
+  Gasto_Detalle gastos_detalle[]
+  created_at    DateTime         @default(now()) @db.Timestamp(0)
+  updated_at    DateTime         @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime?        @db.Timestamp(0)
+
+  Rol rol @relation(fields: [Rol_ID], references: [id])
 }
 
 model gastos {
@@ -30,8 +33,8 @@ model gastos {
   updated_at   DateTime  @default(now()) @db.Timestamp(0)
   deleted_at   DateTime? @db.Timestamp(0)
 
-  User         users     @relation(fields: [User_ID], references: [id])
-  Categoria    categorias @relation(fields: [Categoria_ID], references: [id])
+  User          users            @relation(fields: [User_ID], references: [id])
+  Categoria     categorias       @relation(fields: [Categoria_ID], references: [id])
   Gasto_Detalle gastos_detalle[]
 }
 
@@ -46,17 +49,21 @@ model gastos_detalle {
   updated_at   DateTime  @default(now()) @db.Timestamp(0)
   deleted_at   DateTime? @db.Timestamp(0)
 
-  Gasto        gastos     @relation(fields: [Gasto_ID], references: [id])
-  User         users     @relation(fields: [User_ID], references: [id])
-  Categoria    categorias @relation(fields: [Categoria_ID], references: [id])
+  Gasto     gastos     @relation(fields: [Gasto_ID], references: [id])
+  User      users      @relation(fields: [User_ID], references: [id])
+  Categoria categorias @relation(fields: [Categoria_ID], references: [id])
 }
 
 model categorias {
-  id        Int    @id @default(autoincrement())
-  Categoria String @db.VarChar(255)
-  Gasto gastos[]
+  id            Int              @id @default(autoincrement())
+  Categoria     String           @db.VarChar(255)
+  Gasto         gastos[]
   Gasto_Detalle gastos_detalle[]
 }
 
+model rol {
+  id  Int    @id @default(autoincrement())
+  Rol String @db.VarChar(255)
 
-
+  Users users[]
+}
