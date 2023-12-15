@@ -13,11 +13,12 @@ expensesRouter.get("/expenseByUser/:id", controllers.searchExpenseByUserControll
 expensesRouter.get("/categoria/:id", controllers.searchExpenseByCategoryController);
 
 expensesRouter.use(authMiddleware);
-expensesRouter.use(authAdminMiddleware);
 
 //POSTS
 expensesRouter.post("/createExpenses", controllers.createExpenseController);
 expensesRouter.post("/createCategory", controllers.createCategoryController);
+
+expensesRouter.use(authAdminMiddleware);
 
 //PUTS
 expensesRouter.put("/updateExpense/:id", controllers.updateExpenseController);

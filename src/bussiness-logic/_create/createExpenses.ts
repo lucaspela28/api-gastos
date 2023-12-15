@@ -17,13 +17,20 @@ export async function createExpenses(expense: Expense) {
 				data: gastoData,
 			});
 
+			// Obtener el nombre de la categoría
+			const categoria = await tx.categorias.findUnique({
+				where: {
+					id: expense.categoria_id,
+				},
+			});
+
 			// Crear el detalle del gasto y asignar el ID de gasto a Gasto_ID, incluyendo el Monto
 			const detalleData = {
-				Detalle: expense.detalle,
+				Detalle: `${expense.detalle} - ${categoria?.Categoria || "Sin categoría"}`,
 				User_ID: expense.user_id,
 				Categoria_ID: expense.categoria_id,
-				Monto: expense.monto, // Incluye el Monto solo aquí
-				Gasto_ID: createExpense.id, // Asigna el ID del gasto
+				Monto: expense.monto,
+				Gasto_ID: createExpense.id,
 			};
 
 			const createExpenseDetail = await tx.gastos_detalle.create({
